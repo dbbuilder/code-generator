@@ -29,6 +29,7 @@ def load_config(config_file):
 def get_csharp_type(sql_type):
     """Map SQL data types to C# data types"""
     type_mapping = {
+        "str": "string",
         "image": "byte[]",
         "money": "decimal",
         "int": "int",
@@ -163,9 +164,16 @@ def get_stored_procedure_metadata(cursor, stored_procedure_name):
                 result_set = []
                 for col in columns:
                     col_name = col[0]
-                    sql_type = col[1]
-                    csharp_type = get_csharp_type(sql_type)
-                    result_set.append({"Name": col_name, "Type": csharp_type})
+                    sql_type_class = col[1]  # Extract the SQL type class
+                    sql_type_name = sql_type_class.__name__  # Extract the type name
+                    csharp_type = get_csharp_type(sql_type_name)  # Map to C# type
+                    result_set.append(
+                        {
+                            "Name": col_name,
+                            "SqlType": sql_type_name,  # Include SQL type in JSON
+                            "CSharpType": csharp_type,  # Include C# type in JSON
+                        }
+                    )
 
                 return_type = {"Type": "ResultSet", "Columns": result_set}
             else:
@@ -276,9 +284,10 @@ def update_json_with_metadata(json_file, connection_string):
 
 def main():
     config = load_config("config.json")
-    directory = config["vb_files_directory"]
     sql_config = config["sql_server"]
     connection_string = f"DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={sql_config['server']};DATABASE={sql_config['database']};UID={sql_config['username']};PWD={sql_config['password']}"
+   
+    directory = config["vb_files_directory"]
     json_file = os.path.join(directory, config["output_file"])
     update_json_with_metadata(json_file, connection_string)
     logging.info(f"Metadata retrieval process completed successfully")
