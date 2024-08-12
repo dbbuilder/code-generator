@@ -10,9 +10,8 @@ logging.basicConfig(
     handlers=[logging.FileHandler("retrieve_metadata.log"), logging.StreamHandler()],
 )
 
-
 def load_config(config_file):
-    """Load configuration from a JSON file"""
+    """Load configuration from a JSON file."""
     try:
         with open(config_file, "r") as file:
             config = json.load(file)
@@ -25,11 +24,9 @@ def load_config(config_file):
         logging.error(f"Error decoding JSON configuration: {e}")
         raise
 
-
 def get_csharp_type(sql_type):
-    """Map SQL data types to C# data types"""
+    """Map SQL data types to C# data types."""
     type_mapping = {
-        "str": "string",
         "image": "byte[]",
         "money": "decimal",
         "int": "int",
@@ -51,26 +48,18 @@ def get_csharp_type(sql_type):
         "nvarchar": "string",
         "sysname": "string",
         "bit": "bool",
-        "xml": "string",
-        "numeric": "decimal",
-        "real": "float",
-        "ntext": "string",
-        "binary": "byte[]",
-        "varbinary": "byte[]",
-        "time": "TimeSpan",
+        "str": "string"  # Added mapping from str to string
     }
     return type_mapping.get(str(sql_type).lower(), "object")
 
-
 def parse_sql_type(sql_type, length):
-    """Parse SQL type to extract the type and size"""
+    """Parse SQL type to extract the type and size."""
     if isinstance(sql_type, str):
         return sql_type, length
     return sql_type, None
 
-
 def get_dummy_value(sql_type):
-    """Return a dummy value based on the SQL type"""
+    """Return a dummy value based on the SQL type."""
     dummy_values = {
         "int": 0,
         "bigint": 0,
@@ -99,49 +88,35 @@ def get_dummy_value(sql_type):
     }
     return dummy_values.get(str(sql_type).lower(), "'a'")
 
-
 def get_stored_procedure_metadata(cursor, stored_procedure_name):
-    """Get metadata for a stored procedure from the SQL Server"""
+    """Get metadata for a stored procedure from the SQL Server."""
     try:
-        logging.info(
-            f"Retrieving metadata for stored procedure: {stored_procedure_name}"
-        )
+        logging.info(f"Retrieving metadata for stored procedure: {stored_procedure_name}")
 
         cursor.execute(f"sp_sproc_columns '{stored_procedure_name}'")
         parameters = cursor.fetchall()
 
         if not parameters:
-            logging.warning(
-                f"No metadata found for stored procedure: {stored_procedure_name}"
-            )
-            return [], "void"
+            logging.warning(f"No metadata found for stored procedure: {stored_procedure_name}")
+            return [], {"Scalar": "void", "ResultSet": []}
 
         param_info = []
         param_values = []
-        return_type = "void"
-        scalar_return_type = None  # To capture the scalar return type
-
+        return_type = {"Scalar": "void", "ResultSet": []}
+        
         for param in parameters:
             sql_type, size = parse_sql_type(param[6], param[8])
-            logging.info(
-                f"Parameter: {param[3]}, SQL Type: {sql_type}, Size: {size}, Direction: {param[4]}"
-            )
-            param_info.append(
-                {
-                    "Name": param[3],  # COLUMN_NAME
-                    "Type": sql_type,
-                    "Size": size,
-                    "Direction": param[
-                        4
-                    ],  # PARAMETER_TYPE (1: Input, 2: Output, 4: Return)
-                }
-            )
+            logging.info(f"Parameter: {param[3]}, SQL Type: {sql_type}, Size: {size}, Direction: {param[4]}")
+            param_info.append({
+                "Name": param[3],  # COLUMN_NAME
+                "Type": sql_type,
+                "Size": size,
+                "Direction": param[4],  # PARAMETER_TYPE (1: Input, 2: Output, 4: Return)
+            })
             if param[4] == 1:  # Input parameter
                 param_values.append(get_dummy_value(sql_type))
             elif param[4] == 4 or param[3] == "@RETURN_VALUE":  # Return value
-                scalar_return_type = get_csharp_type(
-                    sql_type
-                )  # Capture scalar return type
+                return_type["Scalar"] = get_csharp_type(sql_type)
             else:
                 param_values.append(None)  # Placeholder for non-input parameters
 
@@ -167,53 +142,31 @@ def get_stored_procedure_metadata(cursor, stored_procedure_name):
                     sql_type_class = col[1]  # Extract the SQL type class
                     sql_type_name = sql_type_class.__name__  # Extract the type name
                     csharp_type = get_csharp_type(sql_type_name)  # Map to C# type
-                    result_set.append(
-                        {
-                            "Name": col_name,
-                            "SqlType": sql_type_name,  # Include SQL type in JSON
-                            "CSharpType": csharp_type,  # Include C# type in JSON
-                        }
-                    )
+                    result_set.append({
+                        "Name": col_name,
+                        "SqlType": sql_type_name,  # Include SQL type in JSON
+                        "CSharpType": csharp_type  # Include C# type in JSON
+                    })
+                
+                return_type["ResultSet"] = result_set
 
-                return_type = {"Type": "ResultSet", "Columns": result_set}
-            else:
-                if return_type == "void":
-                    return_type = "void"
         except pyodbc.Error as e:
-            logging.warning(
-                f"Error executing stored procedure for return type inference: {e}"
-            )
-            if return_type == "void":
-                return_type = "void"
+            logging.warning(f"Error executing stored procedure for return type inference: {e}")
+            # Maintain existing return_type
 
-        # Combine scalar return type and result set type if both are present
-        if scalar_return_type and return_type != "void":
-            return_type = {
-                "ScalarReturnType": scalar_return_type,
-                "ResultSet": return_type["Columns"],
-            }
-        elif scalar_return_type:
-            return_type = scalar_return_type
-
-        logging.info(
-            f"Metadata for {stored_procedure_name}: Parameters: {param_info}, Return Type: {return_type}"
-        )
+        logging.info(f"Metadata for {stored_procedure_name}: Parameters: {param_info}, Return Type: {return_type}")
         return param_info, return_type
 
     except pyodbc.Error as e:
-        logging.error(
-            f"Error retrieving metadata for stored procedure {stored_procedure_name}: {e}"
-        )
+        logging.error(f"Error retrieving metadata for stored procedure {stored_procedure_name}: {e}")
         raise
 
-
 def create_new_connection(connection_string):
-    """Create a new connection to SQL Server"""
+    """Create a new connection to SQL Server."""
     return pyodbc.connect(connection_string)
 
-
 def update_json_with_metadata(json_file, connection_string):
-    """Update the JSON file with metadata from SQL Server"""
+    """Update the JSON file with metadata from SQL Server."""
     try:
         with open(json_file, "r") as file:
             data = json.load(file)
@@ -234,39 +187,25 @@ def update_json_with_metadata(json_file, connection_string):
             for obj in namespace["Objects"]:
                 for sp in obj["StoredProcedures"]:
                     stored_procedure_name = sp["StoredProcedureName"]
-                    logging.info(
-                        f"Processing stored procedure: {stored_procedure_name}"
-                    )
+                    logging.info(f"Processing stored procedure: {stored_procedure_name}")
                     try:
-                        param_info, return_type = get_stored_procedure_metadata(
-                            cursor, stored_procedure_name
-                        )
+                        param_info, return_type = get_stored_procedure_metadata(cursor, stored_procedure_name)
                         sp["Parameters"] = param_info
                         sp["ReturnType"] = return_type
-                        logging.info(
-                            f"Processed stored procedure: {stored_procedure_name} with return type {return_type}"
-                        )
+                        logging.info(f"Processed stored procedure: {stored_procedure_name} with return type {return_type}")
                     except pyodbc.Error as e:
-                        logging.error(
-                            f"Error processing stored procedure {stored_procedure_name}: {e}"
-                        )
+                        logging.error(f"Error processing stored procedure {stored_procedure_name}: {e}")
                         # Create a new connection and retry once
                         conn.close()
                         conn = create_new_connection(connection_string)
                         cursor = conn.cursor()
                         try:
-                            param_info, return_type = get_stored_procedure_metadata(
-                                cursor, stored_procedure_name
-                            )
+                            param_info, return_type = get_stored_procedure_metadata(cursor, stored_procedure_name)
                             sp["Parameters"] = param_info
                             sp["ReturnType"] = return_type
-                            logging.info(
-                                f"Processed stored procedure after retry: {stored_procedure_name} with return type {return_type}"
-                            )
+                            logging.info(f"Processed stored procedure after retry: {stored_procedure_name} with return type {return_type}")
                         except pyodbc.Error as retry_e:
-                            logging.error(
-                                f"Error processing stored procedure {stored_procedure_name} after retry: {retry_e}"
-                            )
+                            logging.error(f"Error processing stored procedure {stored_procedure_name} after retry: {retry_e}")
 
         conn.close()
         logging.info(f"Closed connection to SQL Server")
@@ -281,17 +220,14 @@ def update_json_with_metadata(json_file, connection_string):
         logging.error(f"Error connecting to SQL Server: {e}")
         raise
 
-
 def main():
     config = load_config("config.json")
+    directory = config["vb_files_directory"]
     sql_config = config["sql_server"]
     connection_string = f"DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={sql_config['server']};DATABASE={sql_config['database']};UID={sql_config['username']};PWD={sql_config['password']}"
-   
-    directory = config["vb_files_directory"]
     json_file = os.path.join(directory, config["output_file"])
     update_json_with_metadata(json_file, connection_string)
     logging.info(f"Metadata retrieval process completed successfully")
-
 
 if __name__ == "__main__":
     main()
