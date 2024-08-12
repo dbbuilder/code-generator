@@ -50,6 +50,13 @@ def get_csharp_type(sql_type):
         "nvarchar": "string",
         "sysname": "string",
         "bit": "bool",
+        "xml": "string",
+        "numeric": "decimal",
+        "real": "float",
+        "ntext": "string",
+        "binary": "byte[]",
+        "varbinary": "byte[]",
+        "time": "TimeSpan",
     }
     return type_mapping.get(str(sql_type).lower(), "object")
 
@@ -111,6 +118,8 @@ def get_stored_procedure_metadata(cursor, stored_procedure_name):
         param_info = []
         param_values = []
         return_type = "void"
+        scalar_return_type = None  # To capture the scalar return type
+
         for param in parameters:
             sql_type, size = parse_sql_type(param[6], param[8])
             logging.info(
@@ -129,7 +138,9 @@ def get_stored_procedure_metadata(cursor, stored_procedure_name):
             if param[4] == 1:  # Input parameter
                 param_values.append(get_dummy_value(sql_type))
             elif param[4] == 4 or param[3] == "@RETURN_VALUE":  # Return value
-                return_type = get_csharp_type(sql_type)
+                scalar_return_type = get_csharp_type(
+                    sql_type
+                )  # Capture scalar return type
             else:
                 param_values.append(None)  # Placeholder for non-input parameters
 
@@ -149,11 +160,14 @@ def get_stored_procedure_metadata(cursor, stored_procedure_name):
             cursor.execute(exec_statement)
             columns = cursor.description
             if columns:
-                result_set = [
-                    {"Name": col[0], "Type": get_csharp_type(col[1])} for col in columns
-                ]
-                if return_type == "void" and result_set:
-                    return_type = result_set
+                result_set = []
+                for col in columns:
+                    col_name = col[0]
+                    sql_type = col[1]
+                    csharp_type = get_csharp_type(sql_type)
+                    result_set.append({"Name": col_name, "Type": csharp_type})
+
+                return_type = {"Type": "ResultSet", "Columns": result_set}
             else:
                 if return_type == "void":
                     return_type = "void"
@@ -163,6 +177,15 @@ def get_stored_procedure_metadata(cursor, stored_procedure_name):
             )
             if return_type == "void":
                 return_type = "void"
+
+        # Combine scalar return type and result set type if both are present
+        if scalar_return_type and return_type != "void":
+            return_type = {
+                "ScalarReturnType": scalar_return_type,
+                "ResultSet": return_type["Columns"],
+            }
+        elif scalar_return_type:
+            return_type = scalar_return_type
 
         logging.info(
             f"Metadata for {stored_procedure_name}: Parameters: {param_info}, Return Type: {return_type}"
