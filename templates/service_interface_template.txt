@@ -1,0 +1,13 @@
+using System.Threading.Tasks;
+using {namespace}.Models;
+
+namespace {namespace}.Business
+{{
+    /// <summary>
+    /// Defines the service interface for the {namespace} namespace.
+    /// </summary>
+    public interface {interface_name}
+    {{
+        {methods}
+    }}
+}}

@@ -1,0 +1,10 @@
+{
+  "sql_server": {
+    "server": "data.schoolvision.net\\clubtrack,14333",
+    "database": "trucktrack_schoolvision",
+    "username": "sv",
+    "password": "Gv51076!"
+  },
+  "vb_files_directory": "c:\\devsv\\git 2024-08-11",
+  "output_file": "CodeGen.json"
+}

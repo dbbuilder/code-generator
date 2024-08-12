@@ -1,0 +1,23 @@
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Azure.WebJobs;
+using Microsoft.Azure.WebJobs.Extensions.Http;
+using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Http;
+using System.Threading.Tasks;
+
+namespace {namespace}.API
+{{
+    public class {class_name}
+    {{
+        private readonly ILogger<{class_name}> _logger;
+        {constructor_fields}
+
+        public {class_name}(ILogger<{class_name}> logger, {constructor_injections})
+        {{
+            _logger = logger;
+            {constructor_assignments}
+        }}
+
+        {function_methods}
+    }}
+}}

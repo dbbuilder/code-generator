@@ -1,0 +1,685 @@
+
+(1 rows affected)
+
+(2 rows affected)
+
+(1 rows affected)
+
+(3 rows affected)
+
+(1 rows affected)
+
+(2 rows affected)
+
+(1 rows affected)
+
+(1 rows affected)
+
+(2 rows affected)
+
+(1 rows affected)
+
+(13 rows affected)
+
+(0 rows affected)
+
+(4 rows affected)
+
+(11 rows affected)
+
+(5 rows affected)
+
+(3 rows affected)
+
+(1 rows affected)
+
+(2 rows affected)
+
+(1 rows affected)
+
+(1 rows affected)
+
+(3 rows affected)
+
+(10 rows affected)
+
+(0 rows affected)
+
+(1 rows affected)
+
+(3 rows affected)
+
+(5 rows affected)
+
+(4 rows affected)
+
+(2 rows affected)
+
+(5 rows affected)
+
+(3 rows affected)
+
+(5 rows affected)
+
+(3 rows affected)
+
+(2 rows affected)
+
+(1 rows affected)
+
+(6 rows affected)
+
+(2 rows affected)
+
+(1 rows affected)
+
+(2 rows affected)
+
+(1 rows affected)
+
+(1 rows affected)
+
+(7 rows affected)
+
+(1 rows affected)
+
+(7 rows affected)
+
+(4 rows affected)
+
+(1 rows affected)
+
+(2 rows affected)
+
+(3 rows affected)
+
+(3 rows affected)
+
+(2 rows affected)
+
+(1 rows affected)
+
+(1 rows affected)
+
+(2 rows affected)
+
+(5 rows affected)
+
+(5 rows affected)
+
+(1 rows affected)
+
+(2 rows affected)
+
+(4 rows affected)
+
+(9 rows affected)
+
+(1 rows affected)
+
+(1 rows affected)
+
+(2 rows affected)
+
+(4 rows affected)
+
+(1 rows affected)
+
+(2 rows affected)
+
+(2 rows affected)
+
+(1 rows affected)
+
+(2 rows affected)
+
+(1 rows affected)
+
+(3 rows affected)
+
+(1 rows affected)
+
+(2 rows affected)
+
+(1 rows affected)
+
+(2 rows affected)
+
+(3 rows affected)
+
+(5 rows affected)
+
+(1 rows affected)
+
+(1 rows affected)
+
+(1 rows affected)
+
+(1 rows affected)
+
+(1 rows affected)
+
+(2 rows affected)
+
+(3 rows affected)
+
+(3 rows affected)
+
+(2 rows affected)
+
+(7 rows affected)
+
+(1 rows affected)
+
+(8 rows affected)
+
+(3 rows affected)
+
+(1 rows affected)
+
+(1 rows affected)
+
+(2 rows affected)
+
+(0 rows affected)
+
+(1 rows affected)
+
+(2 rows affected)
+
+(1 rows affected)
+
+(1 rows affected)
+
+(3 rows affected)
+
+(5 rows affected)
+
+(2 rows affected)
+
+(1 rows affected)
+
+(2 rows affected)
+
+(3 rows affected)
+
+(2 rows affected)
+
+(2 rows affected)
+
+(2 rows affected)
+
+(11 rows affected)
+
+(1 rows affected)
+
+(4 rows affected)
+
+(1 rows affected)
+
+(2 rows affected)
+
+(7 rows affected)
+
+(5 rows affected)
+
+(17 rows affected)
+
+(3 rows affected)
+
+(6 rows affected)
+
+(1 rows affected)
+
+(1 rows affected)
+
+(6 rows affected)
+
+(1 rows affected)
+
+(1 rows affected)
+
+(1 rows affected)
+
+(8 rows affected)
+
+(5 rows affected)
+
+(8 rows affected)
+
+(1 rows affected)
+
+(2 rows affected)
+
+(5 rows affected)
+
+(1 rows affected)
+
+(1 rows affected)
+
+(12 rows affected)
+
+(1 rows affected)
+
+(1 rows affected)
+
+(13 rows affected)
+
+(1 rows affected)
+
+(7 rows affected)
+
+(2 rows affected)
+
+(10 rows affected)
+
+(3 rows affected)
+
+(3 rows affected)
+
+(11 rows affected)
+
+(3 rows affected)
+
+(2 rows affected)
+
+(2 rows affected)
+
+(1 rows affected)
+
+(2 rows affected)
+
+(4 rows affected)
+
+(3 rows affected)
+
+(1 rows affected)
+
+(4 rows affected)
+
+(1 rows affected)
+
+(2 rows affected)
+
+(3 rows affected)
+
+(10 rows affected)
+
+(1 rows affected)
+
+(1 rows affected)
+
+(2 rows affected)
+
+(1 rows affected)
+
+(1 rows affected)
+
+(1 rows affected)
+
+(1 rows affected)
+
+(2 rows affected)
+
+(1 rows affected)
+
+(1 rows affected)
+
+(1 rows affected)
+
+(2 rows affected)
+
+(1 rows affected)
+
+(1 rows affected)
+
+(3 rows affected)
+
+(9 rows affected)
+
+(4 rows affected)
+
+(4 rows affected)
+
+(3 rows affected)
+
+(3 rows affected)
+
+(4 rows affected)
+
+(1 rows affected)
+
+(1 rows affected)
+
+(13 rows affected)
+
+(1 rows affected)
+
+(2 rows affected)
+
+(2 rows affected)
+
+(1 rows affected)
+
+(1 rows affected)
+
+(4 rows affected)
+
+(2 rows affected)
+
+(2 rows affected)
+
+(1 rows affected)
+
+(1 rows affected)
+
+(1 rows affected)
+
+(4 rows affected)
+
+(2 rows affected)
+
+(1 rows affected)
+
+(5 rows affected)
+
+(2 rows affected)
+
+(1 rows affected)
+
+(4 rows affected)
+
+(1 rows affected)
+
+(2 rows affected)
+
+(1 rows affected)
+
+(3 rows affected)
+
+(1 rows affected)
+
+(1 rows affected)
+
+(2 rows affected)
+
+(7 rows affected)
+
+(2 rows affected)
+
+(8 rows affected)
+
+(6 rows affected)
+
+(2 rows affected)
+
+(1 rows affected)
+
+(1 rows affected)
+
+(1 rows affected)
+
+(1 rows affected)
+
+(3 rows affected)
+
+(3 rows affected)
+
+(4 rows affected)
+
+(1 rows affected)
+
+(1 rows affected)
+
+(1 rows affected)
+
+(1 rows affected)
+
+(2 rows affected)
+
+(1 rows affected)
+
+(2 rows affected)
+
+(2 rows affected)
+
+(1 rows affected)
+
+(1 rows affected)
+
+(1 rows affected)
+
+(1 rows affected)
+
+(1 rows affected)
+
+(7 rows affected)
+
+(7 rows affected)
+
+(2 rows affected)
+
+(4 rows affected)
+
+(4 rows affected)
+
+(8 rows affected)
+
+(8 rows affected)
+
+(2 rows affected)
+
+(1 rows affected)
+
+(7 rows affected)
+
+(1 rows affected)
+
+(4 rows affected)
+
+(1 rows affected)
+
+(1 rows affected)
+
+(1 rows affected)
+
+(1 rows affected)
+
+(1 rows affected)
+
+(1 rows affected)
+
+(1 rows affected)
+
+(1 rows affected)
+
+(1 rows affected)
+
+(1 rows affected)
+
+(1 rows affected)
+
+(1 rows affected)
+
+(3 rows affected)
+
+(0 rows affected)
+
+(0 rows affected)
+
+(0 rows affected)
+
+(0 rows affected)
+
+(0 rows affected)
+
+(0 rows affected)
+
+(0 rows affected)
+
+(0 rows affected)
+
+(0 rows affected)
+
+(0 rows affected)
+
+(0 rows affected)
+
+(0 rows affected)
+
+(0 rows affected)
+
+(0 rows affected)
+
+(0 rows affected)
+
+(0 rows affected)
+
+(0 rows affected)
+
+(0 rows affected)
+
+(0 rows affected)
+name                                                                                                                             xtype
+-------------------------------------------------------------------------------------------------------------------------------- -----
+Badge_FormatMobileIDUrlAddress                                                                                                   FN   
+ComputeActualBreakTimeInMinutes                                                                                                  FN   
+ComputeCalculatedBreakTimeInMinutes                                                                                              FN   
+ComputeTotalHoursWorked                                                                                                          FN   
+PadLWith                                                                                                                         FN   
+RoundTo15Minutes                                                                                                                 FN   
+SelectDBMailProfileName                                                                                                          FN   
+SelectNextBusinessDay                                                                                                            FN   
+ZeroGUID                                                                                                                         FN   
+SendEmail_Master                                                                                                                 P    
+Account                                                                                                                          U    
+AccountHolderType                                                                                                                U    
+AccountTransaction                                                                                                               U    
+AccountTransactionType                                                                                                           U    
+AccountType                                                                                                                      U    
+AdminLink                                                                                                                        U    
+AgeBracket                                                                                                                       U    
+Badge                                                                                                                            U    
+BadgeAlert                                                                                                                       U    
+BadgeAlertLog                                                                                                                    U    
+BadgeAlertTemplate                                                                                                               U    
+BadgeColorPalette                                                                                                                U    
+BadgeDesign                                                                                                                      U    
+BadgeImage                                                                                                                       U    
+BadgeImageType                                                                                                                   U    
+BadgeInformation                                                                                                                 U    
+BadgeRejectReason                                                                                                                U    
+CertificateCourse                                                                                                                U    
+ComprehensiveRubric                                                                                                              U    
+Document                                                                                                                         U    
+DocumentLink                                                                                                                     U    
+DocumentType                                                                                                                     U    
+DocumentType_Product                                                                                                             U    
+Employee                                                                                                                         U    
+Employee_EmployeeJob                                                                                                             U    
+Employee_File                                                                                                                    U    
+Employee_SecurityAppItem                                                                                                         U    
+EmployeeFingerPrint                                                                                                              U    
+EmployeeJob                                                                                                                      U    
+EmployeeJob_DocumentType                                                                                                         U    
+EmployeeJob_EvalTimeClock                                                                                                        U    
+EmployeeJob_ProcedureType                                                                                                        U    
+EmployeeJobScheduleBase                                                                                                          U    
+EmployeeMessage                                                                                                                  U    
+EmployeeMessageStatus                                                                                                            U    
+EmployeeNote                                                                                                                     U    
+EmployeePeriodSchedule                                                                                                           U    
+EmployeeStatus                                                                                                                   U    
+EmployeeStatus_NewPersonRequiredFields                                                                                           U    
+EmployeeTimeCardItem                                                                                                             U    
+EmployeeTimeCardItemApproval                                                                                                     U    
+EmployeeTimeCardItemEdit                                                                                                         U    
+EmployeeTimeItemType                                                                                                             U    
+EvalComment                                                                                                                      U    
+Guest                                                                                                                            U    
+LocationClockIn                                                                                                                  U    
+LogEntry                                                                                                                         U    
+MealPlan                                                                                                                         U    
+MessageTemplate                                                                                                                  U    
+MessageTemplateToken                                                                                                             U    
+MessageTemplateType                                                                                                              U    
+PersonTest                                                                                                                       U    
+PersonTestType                                                                                                                   U    
+ProcedureEvaluationType                                                                                                          U    
+ProcedureInstance                                                                                                                U    
+ProcedureInstance_ComprehensiveRubric                                                                                            U    
+ProcedureInstance_ComprehensiveRubric_Instructor                                                                                 U    
+ProcedureInstance_Instructor                                                                                                     U    
+ProcedureInstanceHistory                                                                                                         U    
+ProcedureInstanceStatus                                                                                                          U    
+ProcedureInstanceStep                                                                                                            U    
+ProcedureInstanceStep_Instructor                                                                                                 U    
+ProcedureInstanceStepComponent                                                                                                   U    
+ProcedureInstanceStepComponent_Instructor                                                                                        U    
+ProcedureSequence                                                                                                                U    
+ProcedureSequence_EmployeeJob                                                                                                    U    
+ProcedureSequenceFailureRules                                                                                                    U    
+ProcedureSequenceProficiencyRules                                                                                                U    
+ProcedureStep                                                                                                                    U    
+ProcedureStepComponent                                                                                                           U    
+ProcedureType                                                                                                                    U    
+ProcedureType_EmployeeStatus                                                                                                     U    
+Product                                                                                                                          U    
+Product_PriceLevel                                                                                                               U    
+ProductLine                                                                                                                      U    
+Quantity                                                                                                                         U    
+Salon                                                                                                                            U    
+Salon_DocumentType                                                                                                               U    
+Salon_Product                                                                                                                    U    
+SalonBusinessDay                                                                                                                 U    
+SalonBusinessDayTerminal                                                                                                         U    
+SalonPayPeriod                                                                                                                   U    
+SecurityAccess                                                                                                                   U    
+SecurityAccessLog                                                                                                                U    
+SecurityApp                                                                                                                      U    
+SecurityAppItem                                                                                                                  U    
+SecurityProfile                                                                                                                  U    
+State                                                                                                                            U    
+StudentGroup                                                                                                                     U    
+StudentGroup_NewPersonRequiredFields                                                                                             U    
+Ticket                                                                                                                           U    
+TicketLineItem                                                                                                                   U    
+TuitionPaymentType                                                                                                               U    
+Wallet                                                                                                                           U    
+Wallet_Account                                                                                                                   U    
+WalletToken                                                                                                                      U    
+AccountPerson                                                                                                                    V    
+Badge_LinkByFilter                                                                                                               V    
+Badge_LinkByFilter_IncludeInactive                                                                                               V    
+Badge_ReadyForValidation                                                                                                         V    
+Badge_TimeclockHistory                                                                                                           V    
+BadgeDesignView                                                                                                                  V    
+BadgePerson                                                                                                                      V    
+BadgePersonInfoView                                                                                                              V    
+Dates                                                                                                                            V    
+Department                                                                                                                       V    
+Event                                                                                                                            V    
+Institution                                                                                                                      V    
+Instructor                                                                                                                       V    
+Instructor_Location                                                                                                              V    
+InstructorType                                                                                                                   V    
+Location                                                                                                                         V    
+LocationStation                                                                                                                  V    
+Person                                                                                                                           V    
+Person_Event                                                                                                                     V    
+Person_PersonRole                                                                                                                V    
+PersonRole                                                                                                                       V    
+PersonRoleType                                                                                                                   V    
+PersonStatus                                                                                                                     V    
+PersonView                                                                                                                       V    
+POS_Product                                                                                                                      V    
+POS_ProductType                                                                                                                  V    
+Student                                                                                                                          V    
+Student_Location                                                                                                                 V    
+StudentType                                                                                                                      V    
+TruckTrack_Grades                                                                                                                V    
+TruckTrack_OpenGradeSheets                                                                                                       V    
+TruckTrack_Proficiency_Students                                                                                                  V    
+WalletPerson                                                                                                                     V    
+
+(139 rows affected)

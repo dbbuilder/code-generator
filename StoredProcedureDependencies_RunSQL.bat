@@ -1,0 +1,1 @@
+sqlcmd -S data.schoolvision.net\clubtrack,14333 -d TruckTrack_SchoolVision -i "C:\dev\codegenerator\storedproceduredependencies.sql" -U sv -P Gv51076! -o "C:\dev\codegenerator\StoredProcedureDependencies_Out.txt"

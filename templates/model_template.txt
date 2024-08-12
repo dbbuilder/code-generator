@@ -1,0 +1,10 @@
+namespace {namespace}.Models
+{{
+    /// <summary>
+    /// Represents the models in the {namespace} namespace.
+    /// </summary>
+    public class {class_name}
+    {{
+        {fields}
+    }}
+}}
