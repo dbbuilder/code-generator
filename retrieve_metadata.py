@@ -2,7 +2,6 @@ import json
 import logging
 import os
 import pyodbc
-import csv
 
 # Configure logging to write to a log file and output to console
 logging.basicConfig(
@@ -10,6 +9,7 @@ logging.basicConfig(
     format="%(asctime)s - %(levelname)s - %(message)s",
     handlers=[logging.FileHandler("retrieve_metadata.log"), logging.StreamHandler()],
 )
+
 
 def load_config(config_file):
     """Load configuration from a JSON file."""
@@ -24,6 +24,7 @@ def load_config(config_file):
     except json.JSONDecodeError as e:
         logging.error(f"Error decoding JSON configuration: {e}")
         raise
+
 
 def get_csharp_type(sql_type):
     """Map SQL data types to C# data types."""
@@ -49,15 +50,17 @@ def get_csharp_type(sql_type):
         "nvarchar": "string",
         "sysname": "string",
         "bit": "bool",
-        "str": "string"  # Added mapping from str to string
+        "str": "string",  # Added mapping from str to string
     }
     return type_mapping.get(str(sql_type).lower(), "object")
+
 
 def parse_sql_type(sql_type, length):
     """Parse SQL type to extract the type and size."""
     if isinstance(sql_type, str):
         return sql_type, length
     return sql_type, None
+
 
 def get_dummy_value(sql_type):
     """Return a dummy value based on the SQL type."""
@@ -99,11 +102,12 @@ def get_stored_procedure_metadata(cursor, stored_procedure_name):
 
         if not parameters:
             logging.warning(f"No metadata found for stored procedure: {stored_procedure_name}")
-            return [], {"Scalar": "void", "ResultSet": []}
+            return [], "void", []  # Return empty parameter list, 'void' as scalar type, and empty result set
 
         param_info = []
         param_values = []
-        return_type = {"Scalar": "void", "ResultSet": []}
+        scalar_type = "void"
+        result_set = []
         
         for param in parameters:
             sql_type, size = parse_sql_type(param[6], param[8])
@@ -117,7 +121,7 @@ def get_stored_procedure_metadata(cursor, stored_procedure_name):
             if param[4] == 1:  # Input parameter
                 param_values.append(get_dummy_value(sql_type))
             elif param[4] == 4 or param[3] == "@RETURN_VALUE":  # Return value
-                return_type["Scalar"] = get_csharp_type(sql_type)
+                scalar_type = get_csharp_type(sql_type)
             else:
                 param_values.append(None)  # Placeholder for non-input parameters
 
@@ -137,7 +141,6 @@ def get_stored_procedure_metadata(cursor, stored_procedure_name):
             cursor.execute(exec_statement)
             columns = cursor.description
             if columns:
-                result_set = []
                 for col in columns:
                     col_name = col[0]
                     sql_type_class = col[1]  # Extract the SQL type class
@@ -148,134 +151,108 @@ def get_stored_procedure_metadata(cursor, stored_procedure_name):
                         "SqlType": sql_type_name,  # Include SQL type in JSON
                         "CSharpType": csharp_type  # Include C# type in JSON
                     })
-                
-                return_type["ResultSet"] = result_set
 
         except pyodbc.Error as e:
             logging.warning(f"Error executing stored procedure for return type inference: {e}")
-            # Maintain existing return_type
+            # Maintain existing result_set
 
-        logging.info(f"Metadata for {stored_procedure_name}: Parameters: {param_info}, Return Type: {return_type}")
-        return param_info, return_type
+        logging.info(f"Metadata for {stored_procedure_name}: Parameters: {param_info}, Scalar: {scalar_type}, ResultSet: {result_set}")
+        return param_info, scalar_type, result_set
 
     except pyodbc.Error as e:
         logging.error(f"Error retrieving metadata for stored procedure {stored_procedure_name}: {e}")
         raise
 
+
+
 def create_new_connection(connection_string):
     """Create a new connection to SQL Server."""
     return pyodbc.connect(connection_string)
 
-def update_json_and_csv_with_metadata(connection_string, output_csv):
-    """Extract metadata and write directly to CSV, skipping JSON export."""
+
+def update_json_with_metadata(json_file, connection_string):
+    """Update the JSON file with metadata from SQL Server."""
+    try:
+        with open(json_file, "r") as file:
+            data = json.load(file)
+            logging.info(f"Loaded configuration from {json_file}")
+    except FileNotFoundError as e:
+        logging.error(f"Configuration file not found: {e}")
+        raise
+    except json.JSONDecodeError as e:
+        logging.error(f"Error decoding JSON configuration: {e}")
+        raise
+
     try:
         conn = create_new_connection(connection_string)
         cursor = conn.cursor()
         logging.info(f"Connected to SQL Server")
 
-        with open(output_csv, mode='w', newline='', encoding='utf-8') as file:
-            writer = csv.writer(file)
-            writer.writerow([
-                "Namespace", "Object_Name", "FunctionName", "StoredProcedureName", 
-                "ReturnType", "ScalarReturnType", "ResultSetItem1_Name&Type", 
-                "ResultSetItem2_Name&Type", "ResultSetItem3_Name&Type", 
-                "ResultSetItem4_Name&Type", "ResultSetItem5_Name&Type"
-            ])
-
-            # Here you should define your namespaces and objects to iterate through.
-            # Assuming you have them pre-defined, replace `data["Namespaces"]` with
-            # your actual data structure.
-            for namespace in data["Namespaces"]:
-                for obj in namespace["Objects"]:
-                    for sp in obj["StoredProcedures"]:
-                        stored_procedure_name = sp["StoredProcedureName"]
-                        logging.info(f"Processing stored procedure: {stored_procedure_name}")
+        for namespace in data["Namespaces"]:
+            for obj in namespace["Objects"]:
+                for sp in obj["StoredProcedures"]:
+                    stored_procedure_name = sp["StoredProcedureName"]
+                    logging.info(
+                        f"Processing stored procedure: {stored_procedure_name}"
+                    )
+                    try:
+                        param_info, scalar_type, result_set = (
+                            get_stored_procedure_metadata(cursor, stored_procedure_name)
+                        )
+                        sp["Parameters"] = param_info
+                        sp["Scalar"] = scalar_type
+                        sp["ResultSet"] = result_set
+                        logging.info(
+                            f"Processed stored procedure: {stored_procedure_name} with Scalar type {scalar_type} and ResultSet {result_set}"
+                        )
+                    except pyodbc.Error as e:
+                        logging.error(
+                            f"Error processing stored procedure {stored_procedure_name}: {e}"
+                        )
+                        # Create a new connection and retry once
+                        conn.close()
+                        conn = create_new_connection(connection_string)
+                        cursor = conn.cursor()
                         try:
-                            param_info, return_type = get_stored_procedure_metadata(cursor, stored_procedure_name)
+                            param_info, scalar_type, result_set = (
+                                get_stored_procedure_metadata(
+                                    cursor, stored_procedure_name
+                                )
+                            )
                             sp["Parameters"] = param_info
-                            sp["ReturnType"] = return_type
-
-                            # Prepare data for CSV
-                            row = [namespace["Namespace"], obj["Name"], sp["FunctionName"], stored_procedure_name]
-                            if isinstance(return_type, dict):
-                                result_set = return_type.get("ResultSet", [])
-                                if result_set:
-                                    row.append("ResultSet")
-                                    for item in result_set:
-                                        row.append(f"{item.get('Name', '')} ({item.get('CSharpType', '')})")
-                                else:
-                                    row.append("None")
-
-                                scalar_return_type = return_type.get("Scalar", None)
-                                if scalar_return_type:
-                                    row.append(scalar_return_type)
-                                else:
-                                    row.append("None")
-                            elif isinstance(return_type, str):
-                                row.append("Scalar")
-                                row.append(return_type)
-                            else:
-                                row.append("None")
-                                row.append("None")
-
-                            # Write to CSV
-                            writer.writerow(row[:11])
-
-                        except pyodbc.Error as e:
-                            logging.error(f"Error processing stored procedure {stored_procedure_name}: {e}")
-                            # Attempt to re-establish connection and retry once
-                            conn.close()
-                            conn = create_new_connection(connection_string)
-                            cursor = conn.cursor()
-                            try:
-                                param_info, return_type = get_stored_procedure_metadata(cursor, stored_procedure_name)
-                                sp["Parameters"] = param_info
-                                sp["ReturnType"] = return_type
-
-                                # Prepare data for CSV
-                                row = [namespace["Namespace"], obj["Name"], sp["FunctionName"], stored_procedure_name]
-                                if isinstance(return_type, dict):
-                                    result_set = return_type.get("ResultSet", [])
-                                    if result_set:
-                                        row.append("ResultSet")
-                                        for item in result_set:
-                                            row.append(f"{item.get('Name', '')} ({item.get('CSharpType', '')})")
-                                    else:
-                                        row.append("None")
-
-                                    scalar_return_type = return_type.get("Scalar", None)
-                                    if scalar_return_type:
-                                        row.append(scalar_return_type)
-                                    else:
-                                        row.append("None")
-                                elif isinstance(return_type, str):
-                                    row.append("Scalar")
-                                    row.append(return_type)
-                                else:
-                                    row.append("None")
-                                    row.append("None")
-
-                                # Write to CSV
-                                writer.writerow(row[:11])
-
-                            except pyodbc.Error as retry_e:
-                                logging.error(f"Error processing stored procedure {stored_procedure_name} after retry: {retry_e}")
+                            sp["Scalar"] = scalar_type
+                            sp["ResultSet"] = result_set
+                            logging.info(
+                                f"Processed stored procedure after retry: {stored_procedure_name} with Scalar type {scalar_type} and ResultSet {result_set}"
+                            )
+                        except pyodbc.Error as retry_e:
+                            logging.error(
+                                f"Error processing stored procedure {stored_procedure_name} after retry: {retry_e}"
+                            )
 
         conn.close()
         logging.info(f"Closed connection to SQL Server")
-        logging.info(f"CSV export completed successfully and written to {output_csv}")
+
+        output_file = json_file.replace("CodeGen.json", "CodeGen_Metadata.json")
+        logging.info(f"Writing updated metadata to {output_file}")
+        with open(output_file, "w", encoding="utf-8") as file:
+            json.dump(data, file, indent=4)
+        logging.info(f"Updated {output_file} with SQL Server metadata")
 
     except pyodbc.Error as e:
         logging.error(f"Error connecting to SQL Server: {e}")
         raise
 
+
 def main():
     config = load_config("config.json")
+    directory = config["vb_files_directory"]
     sql_config = config["sql_server"]
     connection_string = f"DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={sql_config['server']};DATABASE={sql_config['database']};UID={sql_config['username']};PWD={sql_config['password']}"
-    output_csv = os.path.join(config["vb_files_directory"], "ExtractedFunctions.csv")
-    update_json_and_csv_with_metadata(connection_string, output_csv)
-    logging.info(f"Metadata retrieval and CSV export process completed successfully")
+    json_file = os.path.join(directory, config["output_file"])
+    update_json_with_metadata(json_file, connection_string)
+    logging.info(f"Metadata retrieval process completed successfully")
+
 
 if __name__ == "__main__":
     main()
