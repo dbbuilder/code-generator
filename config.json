@@ -5,6 +5,6 @@
     "username": "sv",
     "password": "Gv51076!"
   },
-  "vb_files_directory": "c:\\devsv\\git 2024-08-11",
+  "base_path": "c:\\devsv\\",
   "output_file": "CodeGen.json"
 }

@@ -244,9 +244,18 @@ def update_json_with_metadata(json_file, connection_string):
         raise
 
 
+def get_latest_git_folder(base_path):
+    # Get all folders in the base_path
+    folders = [f for f in os.listdir(base_path) if os.path.isdir(os.path.join(base_path, f)) and f.startswith("git")]
+
+    # Sort folders by creation time
+    latest_folder = max(folders, key=lambda f: os.path.getctime(os.path.join(base_path, f)))
+    return os.path.join(base_path, latest_folder)
+
 def main():
     config = load_config("config.json")
-    directory = config["vb_files_directory"]
+    base_path = config["base_path"]
+    directory = get_latest_git_folder(base_path)
     sql_config = config["sql_server"]
     connection_string = f"DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={sql_config['server']};DATABASE={sql_config['database']};UID={sql_config['username']};PWD={sql_config['password']}"
     json_file = os.path.join(directory, config["output_file"])

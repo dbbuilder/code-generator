@@ -132,10 +132,19 @@ def save_json_data(json_data, output_file):
     except Exception as e:
         logging.error(f"Error saving JSON data to {output_file}: {e}")
 
+def get_latest_git_folder(base_path):
+    # Get all folders in the base_path
+    folders = [f for f in os.listdir(base_path) if os.path.isdir(os.path.join(base_path, f)) and f.startswith("git")]
+
+    # Sort folders by creation time
+    latest_folder = max(folders, key=lambda f: os.path.getctime(os.path.join(base_path, f)))
+    return os.path.join(base_path, latest_folder)
 
 def main():
     config = load_config("config.json")
-    directory = config["vb_files_directory"]
+    base_path = config["base_path"]
+    directory = get_latest_git_folder(base_path)
+    #directory = config["vb_files_directory"]
     output_file = os.path.join(directory, config["output_file"])
 
     all_vb_files_data = process_directory(directory)
